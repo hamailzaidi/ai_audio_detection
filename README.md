@@ -58,7 +58,30 @@ All evaluation results are saved to `Models/evaluations/`.
 
 ---
 
-## ✅  Limitations
+## Latest Results
+```
+Random Forest (50 estimators)
+
+| Accuracy  | Precision | Recall     | F1 Score |
+|-----------|-----------|------------|----------|
+| 0.90625   | 0.84639   | 0.99265    | 0.91371  |
+
+LightGBM (128 num_leaves)
+
+| Accuracy  | Precision | Recall     | F1 Score |
+|-----------|-----------|------------|----------|
+| 0.93658   | 0.93577   | 0.9375     | 0.93663  |
+
+Logistic Regression
+
+| Accuracy  | Precision | Recall     | F1 Score |
+|-----------|-----------|------------|----------|
+| 0.74448   | 0.81666   | 0.63051    | 0.71161  |
+
+```
+
+
+## Future work & Limitations
 
 - Potential Feature Engineeering to enhance model performance.
 - Hyperparameter tuning
