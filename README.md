@@ -3,7 +3,16 @@
 
 This projec is a Proof-of-concept for training and evaluating classical machine learning models to detect synthetic audio. It uses frequency based feature extraction like MFCC, FFT, STFTs etc and, for the time being, does not include image (Spectrogram) processing technique. 
 
-The real and artificial audio data used in the training has been taken from open source *Fake or Real* (FoR) dataset which contains around 110K real audios and 80K syntehtic audios. The research paper of FoR has been attached in the **Documentation** folder. The dataset is publically available at https://bil.eecs.yorku.ca/datasets/ 
+The solution implemented is inspired from a 2019 University of Toronto study on differentiating between real and synthetic audios. The data used in the training has been taken from the same project, an open source *Fake or Real* (FoR) dataset which contains around 110K real audios and 80K syntehtic audios. The research paper of FoR has been attached in the **Documentation** folder. The dataset is publically available at https://bil.eecs.yorku.ca/datasets/ 
+
+*FoR dataset* includes synthetic audios from various TTS models (also highlighted in the papers attached), including, 
+- DeepVoice3
+- Amazon AWS Polly
+- Baidu TTS
+- Google Traditional TTS
+- Google Cloud TTS
+- Google Wavenet TTS
+- Microsoft Azure TTS
 
 
 ---
@@ -86,6 +95,7 @@ Logistic Regression
 - Potential Feature Engineeering to enhance model performance.
 - Hyperparameter tuning
 - Test the model on a completely different dataset to analyze its generalizability. 
+- Test the model on latest TTS models.
 - Create an inference engine based on the best model.
 - Test and Optimize the inference time.
 - Create APIs.
