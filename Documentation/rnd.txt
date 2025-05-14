@@ -1,0 +1,7 @@
+1. robust feature fusion, text independent speech recognition 
+    https://www.researchgate.net/publication/316922447_Robust_features_fusion_for_text_independent_speaker_verification_enhancement_in_noisy_environments
+    https://www.researchgate.net/figure/Comparison-of-four-feature-extraction-methods-MFCC-IMFCC-LFCC-and-PNCC-in-terms-of_fig1_316922447
+
+2. wavefake dataset
+    https://paperswithcode.com/dataset/wavefake
+    https://zenodo.org/records/5642694
