@@ -14,7 +14,6 @@ The solution implemented is inspired from a 2019 University of Toronto study on 
 - Google Wavenet TTS
 - Microsoft Azure TTS
 
-
 ---
 
 ## Project Structure
@@ -23,10 +22,13 @@ The solution implemented is inspired from a 2019 University of Toronto study on 
 project_root/
 ├── Documentation             # Research material used to build this project
 ├── Models/                   # Trained models, and evaluation metrrices
+├── Datasets/                 # Datasets, contains both for-2sec training data and real-world unseen data to test generalisability
 ├── config.ini                # Configuration file for paths & parameters
 ├── preprocessor.py           # Class: Preprocessor: loads and extracts features
 ├── model_trainer.py          # Class: ModelTrainer: trains ML models
 ├── model_evaluator.py        # Class: ModelEvaluator: evaluates models
+├── predict.py                # Class: InferenceEngine: makes inferences using trained model
+├── data_validator.py         # Class: DataValidator: checks for duplication/data leakage across different splits of training data
 ├── run.py                    # Main file to run the pipeline
 ├── readme.md                 # Project documentation
 ├── requirements.txt          # Project dependencies
@@ -63,8 +65,6 @@ Each model is evaluated on:
 - ROC AUC
 - Confusion Matrix
 
-All evaluation results are saved to `Models/evaluations/`.
-
 ---
 
 ## Latest Results
@@ -89,16 +89,53 @@ Logistic Regression
 
 ```
 
+## Addressing Model Generalizability
 
-## Future work & Limitations
+While the model achieves high accuracy on some test sets, its performance drops significantly on others. This highlights a core challenge in deepfake audio detection: **generalizing across unseen TTS systems and varying synthetic voice characteristics**.
 
-- Potential Feature Engineeering to enhance model performance.
-- Hyperparameter tuning
-- Test the model on a completely different dataset to analyze its generalizability. 
-- Test the model on latest TTS models.
-- Create an inference engine based on the best model.
-- Test and Optimize the inference time.
-- Create APIs.
-- Finalize MLOps Pipeline for future automated retraining and evaluation.
+### Inference Results Across Datasets
 
+| Dataset Name                  | True Label | Total Samples | Classified as REAL | Classified as FAKE | Accuracy |
+|------------------------------|------------|----------------|---------------------|---------------------|----------|
+| LJspeech                     | real       | 200            | 191                 | 9                   | 0.95     |
+| demo_tts_dataset_hf          | fake       | 5              | 4                   | 1                   | 0.20     |
+| tts_audio_samples_hf         | fake       | 20             | 0                   | 20                  | 1.00     |
+| tts_audio_samples_hf2        | fake       | 20             | 2                   | 18                  | 0.90     |
+| tts_english_may_10_hf        | fake       | 274            | 217                 | 57                  | 0.21     |
+
+These results show the model performs exceptionally on certain TTS datasets (e.g., 100% on `tts_audio_samples_hf`) but poorly on others (e.g., ~20% on `demo_tts_dataset_hf` and `tts_english_may_10_hf`).
+
+### Why This might be happening
+
+- The model may be overfitting to specific TTS characteristics in the training data.
+- TTS systems evolve rapidly — newer models differ in audio quality, cadence, prosody, and noise profiles.
+- Lack of diverse negative (synthetic) examples during training.
+
+## Strategies to Improve Generalizability
+
+To improve the model generalisability against a wider range of synthetic voices and TTS technologies, future effort of this project will incorporate additional public datasets. These datasets provide diverse sources of real and synthetic speech which will enable better learning of audio representations.
+
+
+### Potential New Datasets:
+
+- **ASVspoof 2021 Challenge - Speech Deepfake Database**  
+  [https://zenodo.org/records/4835108](https://zenodo.org/records/4835108)  
+  A benchmark dataset for spoofing countermeasures in automatic speaker verification systems.
+
+- **WaveFake: A Data Set to Facilitate Audio Deepfake Detection**  
+  [https://zenodo.org/records/5642694](https://zenodo.org/records/5642694)  
+  A comprehensive deepfake dataset including speech synthesized using modern neural vocoders.
+
+- **LJSpeech Dataset**  
+  [https://keithito.com/LJ-Speech-Dataset/](https://keithito.com/LJ-Speech-Dataset/)  
+  A widely used dataset for TTS training. Real, high-quality speech from a single female speaker.
+
+- **LibriTTS Corpus**  
+  [https://openslr.org/60/](https://openslr.org/60/)  
+  A multi-speaker corpus for TTS research, based on public domain LibriSpeech audiobook recordings.
+
+These datasets can be used to:
+- Retrain existing models with more variety
+- Fine-tune on recent synthetic voices
+- Benchmark the system's performance on new, unseen synthetic speech types
 

@@ -14,8 +14,8 @@
     430 files overlapped overall between fake and real dataset.
 
 
+    the above duplication was only in file names, and the audios were different from each other. 
+    data_validator.py was created to verify the signal difference, also a few were manually checked as well.
 
-4. Models trained log: 
-    Two models trained, first with new features and bad performance, second with new features but heavier models but still bad performance.
 
     
