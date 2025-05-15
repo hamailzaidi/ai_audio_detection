@@ -69,7 +69,7 @@ Each model is evaluated on:
 ---
 
 ## Latest Results
-```
+
 Random Forest (50 estimators)
 
 | Accuracy  | Precision | Recall     | F1 Score |
@@ -88,7 +88,7 @@ Logistic Regression
 |-----------|-----------|------------|----------|
 | 0.74448   | 0.81666   | 0.63051    | 0.71161  |
 
-```
+
 
 ## Addressing Model Generalizability
 
