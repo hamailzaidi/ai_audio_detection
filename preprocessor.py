@@ -7,7 +7,21 @@ from configparser import ConfigParser
 from sklearn.model_selection import train_test_split
 
 class Preprocessor:
+
+    """
+    A class for loading audio data and extracting features for training, validation, and testing datasets.
+    Feature extraction supports FFT, STFT, MFCC, Mel-spectrogram etc..
+
+    """
+
     def __init__(self, config_path="config.ini"):
+        """
+        Initializes the Preprocessor using parameters from a configuration file.
+
+        Args:
+            config_path (str): Path to the configuration file.
+        """
+
         self.config = ConfigParser()
         self.config.read(config_path)
 
@@ -18,7 +32,22 @@ class Preprocessor:
         self.val_dir = Path(self.config.get("PATHS", "val_dir"))
         self.test_dir = Path(self.config.get("PATHS", "test_dir"))
 
-    def extract_features(self, y):
+    # ------------------------------------------------------------------------------------ 
+    # Different  Feature Engineering techniques employed and tested against the evaluation metrics.
+
+
+    def _extract_features(self, y):
+        """
+        Extracts a fixed-length feature vector from an audio signal using multiple spectral techniques.
+        This implementation is same as of Fake or Real (FoR) dataset paper.
+
+        Args:
+            y (np.ndarray): Audio signal.
+
+        Returns:
+            np.ndarray: Feature vector.
+        """
+        
         fft = np.abs(np.fft.fft(y))[:self.output_dim]
         stft_128 = np.abs(librosa.stft(y, n_fft=128)).flatten()[:self.output_dim]
         stft_1024 = np.abs(librosa.stft(y, n_fft=1024)).flatten()[:self.output_dim]
@@ -27,7 +56,19 @@ class Preprocessor:
         mfcc = librosa.feature.mfcc(y=y, sr=self.sr, n_mfcc=128).flatten()[:self.output_dim]
         return np.concatenate([fft, stft_128, stft_1024, mel_128, mel_1024, mfcc])
 
-    def extract_features_v2(self,y, n_mfcc=30):
+    def _extract_features_v2(self,y, n_mfcc=30):
+
+        """
+        Extracts MFCC-based features including deltas, zero crossing rate, and spectral flatness.
+
+        Args:
+            y (np.ndarray): Audio signal.
+            n_mfcc (int): Number of MFCCs to compute.
+
+        Returns:
+            np.ndarray: Feature vector.
+        """
+
         # print(f"Extracting features from: {file_path}")
 
         # MFCCs and deltas
@@ -52,6 +93,9 @@ class Preprocessor:
         flat_mean = np.mean(flatness)
         flat_std = np.std(flatness)
 
+        # This has been commented out because computing fundamental frequency takes much more time around 0.6 seconds per file
+        # as compared to the other features. 
+        
         # Fundamental frequency (pitch)
         # f0, _, _ = librosa.pyin(y, fmin=50, fmax=500, sr=self.sr)
         # f0 = f0[~np.isnan(f0)]  # Remove NaNs
@@ -72,10 +116,18 @@ class Preprocessor:
         # print(features)
         return features
 
-    def extract_features_v3(self, y, n_mfcc=30):
+    def _extract_features_v3(self, y, n_mfcc=30):
+        """
+        Extended feature extraction including MFCC, spectral stats, FFT, STFT, and spectral contrast.
 
+        Args:
+            y (np.ndarray): Audio signal.
+            n_mfcc (int): Number of MFCCs.
 
-        # ================================
+        Returns:
+            np.ndarray: Feature vector.
+        """
+
         # MFCCs and their deltas
         mfcc = librosa.feature.mfcc(y=y, sr=self.sr, n_mfcc=n_mfcc)
         delta = librosa.feature.delta(mfcc)
@@ -134,11 +186,34 @@ class Preprocessor:
         return features
 
 
+    # ------------------------------------------------------------------------------------
+
+    # Getter method for the selected feature engineering technique
     def engineer_features(self,y):
-        return self.extract_features(y)
+        """
+        Feature engineering wrapper to select the selected feature engineering method.
+
+        Args:
+            y (np.ndarray): Audio signal.
+
+        Returns:
+            np.ndarray: Feature vector.
+        """
+
+        return self._extract_features(y)
 
 
-    def process_dataset(self, path):
+    def _process_dataset(self, path):
+        """
+        Loads and processes audio files from a specific dataset directory.
+
+        Args:
+            path (Path): Path to dataset directory with 'real' and 'fake' subfolders.
+
+        Returns:
+            Tuple[np.ndarray, np.ndarray]: Features and labels arrays.
+        """
+
         print('-'*100)
         print(f'Processing: {path}')
         print('-'*100)
@@ -163,24 +238,40 @@ class Preprocessor:
         return np.array(features), np.array(labels)
 
     def prepare_data(self):
+        """
+        Loads and processes training, validation, and test data from configured paths.
+
+        Returns:
+            Tuple of np.ndarrays: X_train, y_train, X_val, y_val, X_test, y_test
+        """
+
         print('-'*100)
         print('Starting preparing Training data.... ')
         print('-'*100)
-        X_train, y_train = self.process_dataset(self.train_dir)
+        X_train, y_train = self._process_dataset(self.train_dir)
         print('-'*100)
         print('Starting preparing Validation data.... ')
         print('-'*100)
 
-        X_val, y_val = self.process_dataset(self.val_dir)
-        X_test, y_test = self.process_dataset(self.test_dir)
+        X_val, y_val = self._process_dataset(self.val_dir)
+        X_test, y_test = self._process_dataset(self.test_dir)
         return X_train, y_train, X_val, y_val, X_test, y_test
 
 
 
-
-
 class Preprocessor2:
+    """
+    Alternate preprocessor for handling a single dataset split and applying feature extraction + splitting.
+    """
+
     def __init__(self, config_path="config.ini"):
+        """
+        Initializes with a config file pointing to real and fake audio folders.
+
+        Args:
+            config_path (str): Path to the config file.
+        """
+
         self.config = ConfigParser()
         self.config.read(config_path)
 
@@ -191,6 +282,18 @@ class Preprocessor2:
         self.fake_dir = Path(self.config.get("PATHS", "fake_dir"))
 
     def extract_features_v2(self, file_path, n_mfcc=30):
+        """
+        This method extracts MFCC + delta, ZCR, and flatness features from a single audio file.
+
+        Args:
+            file_path (str): Path to .wav file.
+            n_mfcc (int)   : Number of MFCCs.
+
+        Returns:
+            np.ndarray: Feature vector.
+        """
+
+
         y, sr = librosa.load(file_path, sr=self.sr)
 
         mfcc = librosa.feature.mfcc(y=y, sr=self.sr, n_mfcc=n_mfcc)
@@ -219,6 +322,18 @@ class Preprocessor2:
         return features
 
     def process_dataset(self, real_path, fake_path):
+        """
+        Loads and processes all .wav files from real and fake directories.
+
+        Args:
+            real_path (Path): Directory of real samples.
+            fake_path (Path): Directory of fake samples.
+
+        Returns:
+            Tuple[np.ndarray, np.ndarray]: Feature and label arrays.
+        """
+
+
         print('-'*100)
         print(f'Processing Real and Fake data...')
         print('-'*100)
@@ -241,6 +356,19 @@ class Preprocessor2:
         return np.array(features), np.array(labels)
 
     def prepare_data(self, test_size=0.2, val_size=0.2, random_state=42):
+        """
+        Loads features and performs train/val/test split with stratification.
+
+        Args:
+            test_size (float): Fraction of data to reserve for test.
+            val_size (float): Fraction to reserve for validation.
+            random_state (int): Random seed.
+
+        Returns:
+            Tuple of np.ndarrays: X_train, y_train, X_val, y_val, X_test, y_test
+        """
+
+
         print('-'*100)
         print('Extracting features and splitting dataset...')
         print('-'*100)

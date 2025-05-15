@@ -6,8 +6,8 @@ from model_evaluator import ModelEvaluator
 logging.basicConfig(level=logging.INFO)
 
 # Load and process data
-pre = Preprocessor()
-X_train, y_train, X_val, y_val, X_test, y_test = pre.prepare_data()
+preprocessor = Preprocessor()
+X_train, y_train, X_val, y_val, X_test, y_test = preprocessor.prepare_data()
 
 # Train models
 trainer = ModelTrainer(X_train,y_train)
@@ -17,7 +17,7 @@ models = {
     "LightGBM": trainer.train_lightgbm()
 }
 
-# Evaluate models
+# Evaluate the trained models
 evaluator = ModelEvaluator()
 for model in trainer.trained_models:
     val_metrics = evaluator.evaluate(model.get('model'), X_val, y_val)

@@ -13,7 +13,21 @@ warnings.filterwarnings("ignore")
 
 
 class InferenceEngine:
+    """
+    A class that does audio classification inference using a pre-trained model.
+    """
+
+
     def __init__(self, preprocessor: Preprocessor, chunk_duration=2.0,config_path = 'config.ini'):
+        """
+        Constructor method that loads the model and configurations.
+
+        Args:
+            preprocessor (Preprocessor): An instance of the Preprocessor class.
+            chunk_duration (float): Duration (in seconds) to split audio into chunks.
+            config_path (str): Path to the configuration file with model path.
+        """
+
         self.config = ConfigParser()
         self.config.read(config_path)
 
@@ -26,11 +40,33 @@ class InferenceEngine:
     
 
     def _split_audio(self, y):
+        """
+        This method splits audio into chunks of predefined length.
+        (2 sec in our case, because the training was done on a dataset of 2 sec audios.)
+
+        Args:
+            y (np.ndarray): Audio Signal.
+
+        Returns:
+            List[np.ndarray]: List of audio chunks.
+        """
+
         return [y[start:start + self.chunk_samples]
                 for start in range(0, len(y) - self.chunk_samples + 1, self.chunk_samples)]
       
 
     def predict_file(self, file_path):
+        """
+        This method predicts the label of a given audio file by averaging predictions across chunks.
+
+        Args:
+            file_path (str): Path to the .wav file.
+
+        Returns:
+            int: 0 (REAL) or 1 (FAKE) or None if the file is too short.
+        """
+
+
         y, sr = librosa.load(file_path, sr=self.preprocessor.sr)
         if len(y) < self.chunk_samples:
             y = np.pad(y, (0, self.chunk_samples - len(y)))
@@ -45,15 +81,22 @@ class InferenceEngine:
         return 1 if mean_pred == 0.5 else int(np.round(mean_pred))
 
 
-    def run_on_directory(self, root_dir, output_base="inference_results"):
+    def run_on_directory(self, root_dir, output_base="InferenceResults"):
+        """
+        This method runs inference on a test dataset directory structured with 'real/' and 'fake/' subfolders.
+
+        Args:
+            root_dir (str): Root directory containing labeled subfolders.
+            output_base (str): Base directory where results will be saved.
+        """
+
+
         root = Path(root_dir)
 
-        # Create timestamped result directory
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         output_dir = Path(output_base) / timestamp
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        # Reset logger to point to this run’s log file
         log_path = output_dir / "inference.log"
         self.logger = self._setup_logger(log_path)
 
@@ -96,7 +139,6 @@ class InferenceEngine:
                 self.logger.info(f"Classified as FAKE (1): {preds.count(1)}")
                 self.logger.info(f"Accuracy: {acc:.2f}\n")
 
-                # Save dataset-specific results
                 result_df = pd.DataFrame({
                     "file": filenames,
                     "true_label": y_true,
@@ -105,7 +147,6 @@ class InferenceEngine:
                 csv_name = f"{dataset_path.name}_results.csv"
                 result_df.to_csv(output_dir / csv_name, index=False)
 
-                # Add to overall summary
                 results_summary.append({
                     "dataset": dataset_path.name,
                     "true_label": label_folder,
@@ -115,16 +156,22 @@ class InferenceEngine:
                     "f1_score": f1
                 })
 
-        # Save global summary
         pd.DataFrame(results_summary).to_csv(output_dir / "evaluation_summary.csv", index=False)
         self.logger.info("✅ All evaluations completed and saved.")
 
 
     def predict(self, file_path):
         """
-        Predict a single audio file and return label and numeric prediction.
-        Logging is suppressed for single file inference.
+        This method predicts and prints the label of a single audio file. used for separate inferencing of a single file, 
+        it uses the predict_file method interenally. 
+
+        Args:
+            file_path (str): Path to the .wav file.
+
+        Returns:
+            Tuple[str, int] or None: (Label, Prediction) or None if invalid.
         """
+        
         file_path = Path(file_path)
         if not file_path.exists():
             print(f"File not found: {file_path}")
@@ -132,16 +179,25 @@ class InferenceEngine:
 
         prediction = self.predict_file(file_path)
         if prediction is not None:
-            label = "REAL" if prediction == 0 else "FAKE"
-            print(f"{file_path.name} → Predicted: {label} ({prediction})")
+            label = "Fake" if prediction else "Real"
+            print(f"{file_path.name} Predicted: {label} ({prediction})")
             return label, prediction
         else:
-            print(f"{file_path.name} → Skipped (invalid or too short)")
+            print(f"{file_path.name} Skipped (invalid or too short)")
             return None
 
 
     @staticmethod
     def _setup_logger(path):
+        """
+        Initializes a logger that writes to a specified file.
+
+        Args:
+            path (Path): Path to log file.
+
+        Returns:
+            logging.Logger: Configured logger instance.
+        """
         logger = logging.getLogger("inference_logger")
         logger.setLevel(logging.INFO)
         logger.handlers.clear()
@@ -157,8 +213,8 @@ if __name__ == "__main__":
         preprocessor=preprocessor,
     )
 
-    # EITHER: Run full batch
-    engine.run_on_directory(root_dir="Datasets/unseen_data")
+    # Run full evaluation
+    # engine.run_on_directory(root_dir="Datasets/unseen_data")
 
-    # OR: Run on a single file
+    # Predict single file
     engine.predict("Datasets/unseen_data/fake/tts_audio_samples_hf2/output_0007.wav")
