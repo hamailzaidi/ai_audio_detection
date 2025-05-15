@@ -1,9 +1,10 @@
 
 # Synthetic Audio Detection Project
+> **Version 1.0** – Basic end-to-end framework for detecting synthetic audio using classical ML models.
 
-This projec is a Proof-of-concept for training and evaluating classical machine learning models to detect synthetic audio. It uses frequency based feature extraction like MFCC, FFT, STFTs etc and, for the time being, does not include image (Spectrogram) processing technique. 
+This projec contains a implemented solution for training and evaluating classical machine learning models to detect synthetic audio. It uses frequency based feature extraction like MFCC, FFT, STFTs etc and, for the time being, does not include image (Spectrogram) processing technique. 
 
-The solution implemented is inspired from a 2019 University of Toronto study on differentiating between real and synthetic audios. The data used in the training has been taken from the same project, an open source *Fake or Real* (FoR) dataset which contains around 110K real audios and 80K syntehtic audios. The research paper of FoR has been attached in the **Documentation** folder. The dataset is publically available at https://bil.eecs.yorku.ca/datasets/ 
+The solution implemented is inspired from a 2019 York University, Toronto study on differentiating between real and synthetic audios. The data used in the training has been taken from the same project, an open source *Fake or Real* (FoR) dataset which contains around 110K real audios and 80K syntehtic audios. The research paper of FoR has been attached in the **Documentation** folder. The dataset is publically available at https://bil.eecs.yorku.ca/datasets/ 
 
 *FoR dataset* includes synthetic audios from various TTS models (also highlighted in the papers attached), including, 
 - DeepVoice3
@@ -118,6 +119,8 @@ To improve the model generalisability against a wider range of synthetic voices 
 
 ### Potential New Datasets:
 
+Following datasets have been researched and downloaded for future versions of this project.
+
 - **ASVspoof 2021 Challenge - Speech Deepfake Database**  
   [https://zenodo.org/records/4835108](https://zenodo.org/records/4835108)  
   A benchmark dataset for spoofing countermeasures in automatic speaker verification systems.
@@ -134,8 +137,14 @@ To improve the model generalisability against a wider range of synthetic voices 
   [https://openslr.org/60/](https://openslr.org/60/)  
   A multi-speaker corpus for TTS research, based on public domain LibriSpeech audiobook recordings.
 
-These datasets can be used to:
-- Retrain existing models with more variety
-- Fine-tune on recent synthetic voices
-- Benchmark the system's performance on new, unseen synthetic speech types
+
+## Acknowledgements
+- Based on the 2019 FoR Dataset from York University.
+
+## Contributing
+Contributions are welcome! Please open issues or submit pull requests.
+
+## Contact
+For feedback or questions, contact [hamail1041@gmail.com].
+
 
