@@ -32,7 +32,7 @@ class ModelTrainer:
             self._save_model(model, "LogisticRegression")
         return model
 
-    def train_random_forest(self, n_estimators=50, max_depth=10, dump=True):
+    def train_random_forest(self, n_estimators=100, max_depth=20, dump=True):
         model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
         model.fit(self.X_train, self.y_train)
 
@@ -42,7 +42,7 @@ class ModelTrainer:
         return model
 
     def train_lightgbm(self, dump=True):
-        model = lgb.LGBMClassifier(num_leaves=128, max_depth=20, learning_rate=0.05, n_estimators=50, random_state=42)
+        model = lgb.LGBMClassifier(num_leaves=128, max_depth=20, learning_rate=0.05, n_estimators=100, random_state=42)
         model.fit(self.X_train, self.y_train)
         if dump:
             self._save_model(model, "LightGBM")

@@ -2,5 +2,13 @@ __pycache__/
 
 
 /my_env
-/for-2sec
 rough.ipynb
+
+Datasets/for-2sec/for-2seconds/validation/
+Datasets/for-2sec/for-2seconds/testing/
+Datasets/for-2sec/for-2seconds/training/
+Datasets/for-2sec/for-2seconds-all
+
+Datasets/huggingface/Style_tts_upsc_siddarth_singh
+
+/test_dataset

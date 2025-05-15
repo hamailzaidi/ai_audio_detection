@@ -1,0 +1,51 @@
+2025-05-15 15:21:55,416 - ----------------------------------------------------------------------------------------------------
+2025-05-15 15:21:55,416 - Model: RandomForestClassifier(max_depth=20, n_estimators=50, random_state=42)
+2025-05-15 15:21:55,417 - Model Path: Models\RandomForest\2025-05-14 23-57\model.pkl
+2025-05-15 15:21:55,417 - Dataset: Datasets\unseen_data\real\LJspeech
+2025-05-15 15:21:55,417 - True Label: real
+2025-05-15 15:22:13,750 - Total files processed: 200
+2025-05-15 15:22:13,750 - Classified as REAL (0): 191
+2025-05-15 15:22:13,750 - Classified as FAKE (1): 9
+2025-05-15 15:22:13,751 - Accuracy: 0.95
+
+2025-05-15 15:22:13,760 - ----------------------------------------------------------------------------------------------------
+2025-05-15 15:22:13,761 - Model: RandomForestClassifier(max_depth=20, n_estimators=50, random_state=42)
+2025-05-15 15:22:13,761 - Model Path: Models\RandomForest\2025-05-14 23-57\model.pkl
+2025-05-15 15:22:13,761 - Dataset: Datasets\unseen_data\fake\demo_tts_dataset_hf
+2025-05-15 15:22:13,761 - True Label: fake
+2025-05-15 15:22:16,822 - Total files processed: 5
+2025-05-15 15:22:16,822 - Classified as REAL (0): 4
+2025-05-15 15:22:16,822 - Classified as FAKE (1): 1
+2025-05-15 15:22:16,822 - Accuracy: 0.20
+
+2025-05-15 15:22:16,830 - ----------------------------------------------------------------------------------------------------
+2025-05-15 15:22:16,831 - Model: RandomForestClassifier(max_depth=20, n_estimators=50, random_state=42)
+2025-05-15 15:22:16,831 - Model Path: Models\RandomForest\2025-05-14 23-57\model.pkl
+2025-05-15 15:22:16,832 - Dataset: Datasets\unseen_data\fake\tts_audio_samples_hf
+2025-05-15 15:22:16,832 - True Label: fake
+2025-05-15 15:22:18,696 - Total files processed: 20
+2025-05-15 15:22:18,696 - Classified as REAL (0): 0
+2025-05-15 15:22:18,697 - Classified as FAKE (1): 20
+2025-05-15 15:22:18,697 - Accuracy: 1.00
+
+2025-05-15 15:22:18,699 - ----------------------------------------------------------------------------------------------------
+2025-05-15 15:22:18,699 - Model: RandomForestClassifier(max_depth=20, n_estimators=50, random_state=42)
+2025-05-15 15:22:18,699 - Model Path: Models\RandomForest\2025-05-14 23-57\model.pkl
+2025-05-15 15:22:18,699 - Dataset: Datasets\unseen_data\fake\tts_audio_samples_hf2
+2025-05-15 15:22:18,699 - True Label: fake
+2025-05-15 15:22:20,337 - Total files processed: 20
+2025-05-15 15:22:20,337 - Classified as REAL (0): 2
+2025-05-15 15:22:20,337 - Classified as FAKE (1): 18
+2025-05-15 15:22:20,337 - Accuracy: 0.90
+
+2025-05-15 15:22:20,346 - ----------------------------------------------------------------------------------------------------
+2025-05-15 15:22:20,347 - Model: RandomForestClassifier(max_depth=20, n_estimators=50, random_state=42)
+2025-05-15 15:22:20,347 - Model Path: Models\RandomForest\2025-05-14 23-57\model.pkl
+2025-05-15 15:22:20,347 - Dataset: Datasets\unseen_data\fake\tts_english_may_10_hf
+2025-05-15 15:22:20,348 - True Label: fake
+2025-05-15 15:22:39,891 - Total files processed: 274
+2025-05-15 15:22:39,891 - Classified as REAL (0): 217
+2025-05-15 15:22:39,891 - Classified as FAKE (1): 57
+2025-05-15 15:22:39,891 - Accuracy: 0.21
+
+2025-05-15 15:22:39,895 - ✅ All evaluations completed and saved.

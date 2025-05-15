@@ -5,3 +5,17 @@
 2. wavefake dataset
     https://paperswithcode.com/dataset/wavefake
     https://zenodo.org/records/5642694
+
+
+3. 135 files data leakage from training to test data in FoR dataset. (real audios)
+    11 files data leakage from training to test data in FoR dataset (fake audios)
+    3 files overlapped from the validation set. (fake)
+
+    430 files overlapped overall between fake and real dataset.
+
+
+
+4. Models trained log: 
+    Two models trained, first with new features and bad performance, second with new features but heavier models but still bad performance.
+
+    
