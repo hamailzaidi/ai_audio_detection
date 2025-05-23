@@ -1,0 +1,6 @@
+dataset,true_label,accuracy,precision,recall,f1_score
+LJspeech,real,0.615,0.0,0.0,0.0
+demo_tts_dataset_hf,fake,0.2,1.0,0.2,0.3333333333333333
+tts_audio_samples_hf,fake,0.0,0.0,0.0,0.0
+tts_audio_samples_hf2,fake,0.0,0.0,0.0,0.0
+tts_english_may_10_hf,fake,0.051094890510948905,1.0,0.051094890510948905,0.09722222222222222

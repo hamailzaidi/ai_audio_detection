@@ -186,6 +186,30 @@ class Preprocessor:
         return features
 
 
+    def _extract_spectral_features(self, y):
+        """
+        Extracts the average spectral centroid, bandwidth, and rolloff from an audio signal.
+
+        Args:
+            y (np.ndarray): Audio signal.
+
+        Returns:
+            np.ndarray: Feature vector with mean values of spectral features.
+        """
+
+        centroid = np.mean(librosa.feature.spectral_centroid(y=y, sr=self.sr))
+
+        bandwidth = np.mean(librosa.feature.spectral_bandwidth(y=y, sr=self.sr))
+
+        rolloff = np.mean(librosa.feature.spectral_rolloff(y=y, sr=self.sr))
+
+        features = np.array([centroid, bandwidth, rolloff])
+
+        return features
+
+
+
+
     # ------------------------------------------------------------------------------------
 
     # Getter method for the selected feature engineering technique
@@ -200,7 +224,8 @@ class Preprocessor:
             np.ndarray: Feature vector.
         """
 
-        return self._extract_features(y)
+        # return self._extract_features(y) 
+        return self._extract_spectral_features(y)
 
 
     def _process_dataset(self, path):

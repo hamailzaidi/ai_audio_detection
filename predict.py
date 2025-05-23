@@ -55,7 +55,7 @@ class InferenceEngine:
                 for start in range(0, len(y) - self.chunk_samples + 1, self.chunk_samples)]
       
 
-    def predict_file(self, file_path):
+    def predict_file(self, file_path,split=True):
         """
         This method predicts the label of a given audio file by averaging predictions across chunks.
 
@@ -70,16 +70,25 @@ class InferenceEngine:
         y, sr = librosa.load(file_path, sr=self.preprocessor.sr)
         if len(y) < self.chunk_samples:
             y = np.pad(y, (0, self.chunk_samples - len(y)))
+        if split: 
+            chunks = self._split_audio(y)
+            if not chunks:
+                return None
 
-        chunks = self._split_audio(y)
-        if not chunks:
-            return None
+            features = [self.preprocessor.engineer_features(chunk) for chunk in chunks]
+            preds = self.model.predict(np.array(features))
+            mean_pred = np.mean(preds)
+            return 1 if mean_pred == 0.5 else int(np.round(mean_pred))
+        else: 
+            features = self.preprocessor.engineer_features(y)
+            scaler = joblib.load('TestPipeline\scaler.joblib')
+            features_scaled = scaler.transform([features])
+            pred = self.model.predict(features_scaled)[0]
 
-        features = [self.preprocessor.engineer_features(chunk) for chunk in chunks]
-        preds = self.model.predict(np.array(features))
-        mean_pred = np.mean(preds)
-        return 1 if mean_pred == 0.5 else int(np.round(mean_pred))
-
+            # in the trained model, 0 means AI, 1 means Human, and in this pipeline, 1 means AI so
+            # thats why.
+            return 1 if pred<=0.5 else 0
+            pass
 
     def run_on_directory(self, root_dir, output_base="InferenceResults"):
         """
@@ -119,7 +128,7 @@ class InferenceEngine:
                 preds, filenames = [], []
 
                 for wav_file in sorted(dataset_path.glob("*.wav")):
-                    pred = self.predict_file(wav_file)
+                    pred = self.predict_file(wav_file,split=False)
                     if pred is not None:
                         preds.append(pred)
                         filenames.append(wav_file.name)
@@ -177,7 +186,7 @@ class InferenceEngine:
             print(f"File not found: {file_path}")
             return None
 
-        prediction = self.predict_file(file_path)
+        prediction = self.predict_file(file_path,split=False)
         if prediction is not None:
             label = "Fake" if prediction else "Real"
             print(f"{file_path.name} Predicted: {label} ({prediction})")
@@ -211,10 +220,11 @@ if __name__ == "__main__":
     preprocessor = Preprocessor("config.ini")
     engine = InferenceEngine(
         preprocessor=preprocessor,
+
     )
 
     # Run full evaluation
-    # engine.run_on_directory(root_dir="Datasets/unseen_data")
+    engine.run_on_directory(root_dir="Datasets/unseen_data")
 
     # Predict single file
-    engine.predict("Datasets/unseen_data/fake/tts_audio_samples_hf2/output_0007.wav")
+    # engine.predict("Datasets/unseen_data/fake/tts_audio_samples_hf2/output_0007.wav")

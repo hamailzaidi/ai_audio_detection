@@ -1,0 +1,51 @@
+2025-05-23 09:27:49,547 - ----------------------------------------------------------------------------------------------------
+2025-05-23 09:27:49,554 - Model: RandomForestClassifier(random_state=42)
+2025-05-23 09:27:49,554 - Model Path: TestPipeline\test_model.joblib
+2025-05-23 09:27:49,554 - Dataset: Datasets\unseen_data\real\LJspeech
+2025-05-23 09:27:49,554 - True Label: real
+2025-05-23 09:28:05,492 - Total files processed: 200
+2025-05-23 09:28:05,492 - Classified as REAL (0): 123
+2025-05-23 09:28:05,492 - Classified as FAKE (1): 77
+2025-05-23 09:28:05,492 - Accuracy: 0.61
+
+2025-05-23 09:28:05,513 - ----------------------------------------------------------------------------------------------------
+2025-05-23 09:28:05,518 - Model: RandomForestClassifier(random_state=42)
+2025-05-23 09:28:05,518 - Model Path: TestPipeline\test_model.joblib
+2025-05-23 09:28:05,518 - Dataset: Datasets\unseen_data\fake\demo_tts_dataset_hf
+2025-05-23 09:28:05,518 - True Label: fake
+2025-05-23 09:28:07,444 - Total files processed: 5
+2025-05-23 09:28:07,444 - Classified as REAL (0): 4
+2025-05-23 09:28:07,444 - Classified as FAKE (1): 1
+2025-05-23 09:28:07,444 - Accuracy: 0.20
+
+2025-05-23 09:28:07,454 - ----------------------------------------------------------------------------------------------------
+2025-05-23 09:28:07,455 - Model: RandomForestClassifier(random_state=42)
+2025-05-23 09:28:07,455 - Model Path: TestPipeline\test_model.joblib
+2025-05-23 09:28:07,455 - Dataset: Datasets\unseen_data\fake\tts_audio_samples_hf
+2025-05-23 09:28:07,455 - True Label: fake
+2025-05-23 09:28:09,644 - Total files processed: 20
+2025-05-23 09:28:09,644 - Classified as REAL (0): 20
+2025-05-23 09:28:09,644 - Classified as FAKE (1): 0
+2025-05-23 09:28:09,644 - Accuracy: 0.00
+
+2025-05-23 09:28:09,647 - ----------------------------------------------------------------------------------------------------
+2025-05-23 09:28:09,648 - Model: RandomForestClassifier(random_state=42)
+2025-05-23 09:28:09,649 - Model Path: TestPipeline\test_model.joblib
+2025-05-23 09:28:09,649 - Dataset: Datasets\unseen_data\fake\tts_audio_samples_hf2
+2025-05-23 09:28:09,649 - True Label: fake
+2025-05-23 09:28:10,790 - Total files processed: 20
+2025-05-23 09:28:10,790 - Classified as REAL (0): 20
+2025-05-23 09:28:10,790 - Classified as FAKE (1): 0
+2025-05-23 09:28:10,790 - Accuracy: 0.00
+
+2025-05-23 09:28:10,793 - ----------------------------------------------------------------------------------------------------
+2025-05-23 09:28:10,793 - Model: RandomForestClassifier(random_state=42)
+2025-05-23 09:28:10,793 - Model Path: TestPipeline\test_model.joblib
+2025-05-23 09:28:10,793 - Dataset: Datasets\unseen_data\fake\tts_english_may_10_hf
+2025-05-23 09:28:10,793 - True Label: fake
+2025-05-23 09:28:24,254 - Total files processed: 274
+2025-05-23 09:28:24,254 - Classified as REAL (0): 260
+2025-05-23 09:28:24,254 - Classified as FAKE (1): 14
+2025-05-23 09:28:24,254 - Accuracy: 0.05
+
+2025-05-23 09:28:24,266 - ✅ All evaluations completed and saved.
