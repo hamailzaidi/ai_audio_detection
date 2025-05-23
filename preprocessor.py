@@ -224,8 +224,8 @@ class Preprocessor:
             np.ndarray: Feature vector.
         """
 
-        # return self._extract_features(y) 
-        return self._extract_spectral_features(y)
+        return self._extract_features(y) 
+        # return self._extract_spectral_features(y)
 
 
     def _process_dataset(self, path):

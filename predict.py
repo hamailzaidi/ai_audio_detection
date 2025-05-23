@@ -128,7 +128,7 @@ class InferenceEngine:
                 preds, filenames = [], []
 
                 for wav_file in sorted(dataset_path.glob("*.wav")):
-                    pred = self.predict_file(wav_file,split=False)
+                    pred = self.predict_file(wav_file,split=True)
                     if pred is not None:
                         preds.append(pred)
                         filenames.append(wav_file.name)
@@ -186,7 +186,7 @@ class InferenceEngine:
             print(f"File not found: {file_path}")
             return None
 
-        prediction = self.predict_file(file_path,split=False)
+        prediction = self.predict_file(file_path,split=True)
         if prediction is not None:
             label = "Fake" if prediction else "Real"
             print(f"{file_path.name} Predicted: {label} ({prediction})")
@@ -224,7 +224,7 @@ if __name__ == "__main__":
     )
 
     # Run full evaluation
-    engine.run_on_directory(root_dir="Datasets/unseen_data")
+    # engine.run_on_directory(root_dir="Datasets/unseen_data")
 
     # Predict single file
-    # engine.predict("Datasets/unseen_data/fake/tts_audio_samples_hf2/output_0007.wav")
+    engine.predict("Datasets/unseen_data/fake/tts_audio_samples_hf2/output_0007.wav")
